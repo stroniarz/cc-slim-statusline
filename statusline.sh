@@ -116,6 +116,14 @@ fmt_reset() {
   fi
 }
 
+# Sanitize: valid percentages are 0..100. Anything else (e.g. raw timestamp
+# leaking into used_percentage on a fresh session) is treated as missing.
+valid_pct() {
+  [ -n "$1" ] && [ "$1" -ge 0 ] 2>/dev/null && [ "$1" -le 100 ] 2>/dev/null
+}
+valid_pct "$plan5" || plan5=""
+valid_pct "$plan7" || plan7=""
+
 if [ -n "$plan5" ]; then
   p5c=$(pct_color "$plan5")
   r5=$(fmt_reset "$plan5_reset")
